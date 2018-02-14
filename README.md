@@ -1,5 +1,4 @@
 # MyDictionary
-# MyDictionary
 
                      Aleksandr Kuzmenko                                    
                      02/13/2018                                            
