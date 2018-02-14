@@ -19,7 +19,7 @@
                                                                            
                      If the word is not found, the word is added to        
                      the dictionary.                                       
-                     The dictionary has 3000+ words (English/Ukraine)      
+                     The dictionary has 6000+ words (English/Ukraine)      
                                                                            
                       Version 2.1                                          
  \************************************************************************/  
