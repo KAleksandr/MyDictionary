@@ -2,7 +2,8 @@
 #include <windows.h>
 #include "error_open.h"
 using namespace std;
-
+//якщо файлу словника немає в деректорії, видає повідомлення і створює чистий файл, в який можна додавати нові слова
+// if the dictionary file is not in the tree, issuing a message and creating a clean file in which you can add new words
 void error_open(){
      HANDLE hStdOut = GetStdHandle(STD_OUTPUT_HANDLE);
      SetConsoleTextAttribute(hStdOut, 4);
