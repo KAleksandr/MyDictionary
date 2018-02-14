@@ -18,3 +18,5 @@ HEADERS += \
     logo.h \
     time_chrono.h \
     about.h
+RC_FILE = dictionary.rc
+TARGET = MyDictionary_v2_1

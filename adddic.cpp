@@ -15,7 +15,8 @@ bool menuRun(char buffer[], char buffer2[], bool typeDic);
 void addWord(char buffer[], char buffer2[],bool typeDic);
 void translation(char buffer[], char buffer2[],bool typeDic);
 void AddWords(char buffer[], char buffer2[],bool typeDic);
-int i=0;
+int i=0;//count words
+int iter=0;
 int flag=0;
 struct node
 {
@@ -70,7 +71,7 @@ void find(node *tree, bool typeDic, char findWord[])//Found word
 {
     start_chrono();//start лічильник часу//word search time counter
     size_t hashT;
-
+    iter++;
         hashT =hashWord(findWord);//create hash number word user
 
    if (tree == NULL) return;
@@ -84,8 +85,8 @@ void find(node *tree, bool typeDic, char findWord[])//Found word
         {
             if (tree->hashEn == hashT)
             {
-                colorText("\n\t   Word        Translation");
-                cout << "\n\t    "<< tree->engWord << "    -    "; //Output on screen
+                colorText("\n\t\t   Word        Translation");
+                cout << "\n\t\t   "<<tree->engWord << "   -   "; //Output on screen
                 colorText(tree->uaWord);
                 found = true;
                 cout << "\n\n\t\tsearch time: " << elapsed() << endl;
@@ -96,8 +97,8 @@ void find(node *tree, bool typeDic, char findWord[])//Found word
         else
             if (tree->hashUa == hashT)
             {
-                colorText("\n\t   Слово        Переклад");
-                cout << "\n\t   "<< tree->uaWord <<   "   -   "; //
+                colorText("\n\t\tСлово        Переклад");
+                cout << "\n\t\t   "<< tree->uaWord <<   "   -   "; //
                 colorText(tree->engWord);
                 found = true;
                 cout << "\n\n\t\ttime: " << elapsed() << endl;
@@ -180,7 +181,7 @@ bool menuRun(char buffer[], char buffer2[], bool typeDic){
     int menu,count=0;
     do{
         char c;
-        cout <<'\t';
+        cout <<"\n\t\t";
         cin >> c;
         menu = c - '0';
          if(!(isdigit(c)) || menu >4){//перевірка на введення команди//checking for a team entry
@@ -198,8 +199,11 @@ bool menuRun(char buffer[], char buffer2[], bool typeDic){
     case 1:
         if (typeDic){
             while(1){
+                iter=0;
                 translation(buffer,buffer2,typeDic);
-                 colorText("\n\t\tTranslation next (y/n)?");
+                cout << "\t\tcount iteration: "<< iter<< endl;
+                 colorTextW("\n\t\tTranslation next (y/n)?");
+
                 char c = getch();
                 if(!(c == 'y' || c == 'Y'))
                     break;
@@ -209,7 +213,8 @@ bool menuRun(char buffer[], char buffer2[], bool typeDic){
         else{
             while(1){
                 translation(buffer,buffer2,typeDic);
-                colorText("\n\t\tНаступний переклад (y/n)?");
+                cout << "\t\tcount iteration: "<< iter<< endl;
+                colorTextW("\n\t\tНаступний переклад (y/n)?");
                 char c = getch();
                 if(!(c == 'y' || c == 'Y'))
                     break;
@@ -291,7 +296,7 @@ void translation(char buffer[], char buffer2[],bool typeDic){
     }
     else{
         logoText(typeDic);
-        cout << "\n\n\t\tВведіть слово ";
+        cout << "\n\n\t\tВведіть слово: ";
         cin >>  buffer2;
         found = false;
         find(root, typeDic, buffer2);
@@ -313,7 +318,7 @@ void addWord(char buffer[], char buffer2[],bool typeDic){
     if (typeDic)
     {
         cout << "\n\n\t\tAdd a word:" <<endl;
-        colorTextW( "\tEnter word (Eng) ");
+        colorTextW( "\t Enter word (Eng) ");
         cout << buffer;
         colorTextW("\nEnter the translator (Uk) ");
         fflush(stdin);
@@ -335,17 +340,13 @@ void addWord(char buffer[], char buffer2[],bool typeDic){
 }
 //adding words with menu
 void AddWords(char buffer[], char buffer2[],bool typeDic){
-    char engWordT[50];
+
        if (typeDic)
         {
         logoText(typeDic);
         cout << "\n\n\t\tAdd a word:" <<endl;
         colorTextW( "\t       Enter word (Eng) ");
         cin >> buffer;//зчитую слово
-
-        colorTextW("\nEnter a transcription: ");
-        fflush(stdin);
-        gets(engWordT);
         found = false;
         find(root, typeDic, buffer);
         if (!found){
