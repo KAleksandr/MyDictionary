@@ -18,7 +18,6 @@ HEADERS += \
     adddic.h \
     color.h \
     error_open.h \
-    hash.h \
     logo.h \
     time_chrono.h \
     treeoption.h

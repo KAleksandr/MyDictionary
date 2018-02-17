@@ -33,7 +33,9 @@ int main(void)
     SetConsoleCP(1251);
     SetConsoleOutputCP(1251);//local ukr
     system("mode con cols=60 lines=35");//size windows
+    system("title MyDictionary ver 2.2");
 
     logo();
     menu();
+
 }

@@ -1,38 +1,16 @@
 #include <iostream>
 #include "time_chrono.h"
 #include <ctime>//TIME
-#include <fstream>
-#include <string.h>
-#include <cctype>
-#include <conio.h>
-#include <cstdlib>//for exit
+#define ESC 27
 #include "error_open.h"
-//#include "color.h"
-//#include "hash.h"
 #include "about.h"
 #include "treeoption.h"
 using namespace std;
 bool found;//результат знаходження слова //the result of finding the word
-bool menuRun(char buffer[], char buffer2[], bool typeDic);
-void addWord(char buffer[], char buffer2[],bool typeDic);
-double translation(char buffer[], char buffer2[],bool typeDic);
-double translationFast(char buffer[], char buffer2[],bool typeDic);
-void AddWords(char buffer[], char buffer2[],bool typeDic);
-void menu();
-void optionRun();
-
 
 int i=0;//count words
 int iter=0;
 int flag=0;
-//struct node
-//{
-//    size_t hashEn;
-//    size_t hashUa;
-//    char uaWord[50];
-//    char engWord[50];
-//    node *left, *right;
-//};
 
 node * root = NULL;
 void show(node *tree);
@@ -89,7 +67,6 @@ void Load(node **tree)//download from the word file
     while (!file.eof())
     {
         file >> buffer;
-        //file >> engWordT;
         char ch; file.get(ch);//Зчитую символ пробіл із файла!!!//Read the character space from the file !!!
         file.getline(buffer2, max_lenght);
         if (strlen(buffer)>0)
@@ -116,7 +93,7 @@ void menu(){
             cout << "\t\t2. Add a word" << endl;
             cout << "\t\t3. Change the Language of the menu " << endl;
             cout << "\t\t4. Options"<< endl;
-            cout << "\t\t5. Find substrings"<< endl;
+            //cout << "\t\t5. Find substrings"<< endl;
             cout << "\t\t0. Exit" << endl;
 
         }
@@ -127,87 +104,28 @@ void menu(){
             cout << "\t\t2. Додати слово" << endl;
             cout << "\t\t3. Змінити мову перекладу" << endl;
             cout << "\t\t4. Параметри" <<endl;
-            cout << "\t\t5. Пошук підстроки"<< endl;
+            //cout << "\t\t5. Пошук підстроки"<< endl;
             cout << "\t\t0. Вихід" << endl;
         }
        typeDic = menuRun(buffer, buffer2,typeDic);//обробка запиту меню//processing menu request
     }
 }
-void Options(bool typeDic){
-    system("cls");//очистка екрану//cleaning the screen
-    while (true){
-        if(typeDic){
-            logoText(typeDic);
-            colorTextB("\n\t\tOPTIONS");
-            colorText("\n\n\t\tSelect an action:");
-            cout << "\t\t1. Save to file" << endl;
-            cout << "\t\t2. About MyDictionary" << endl;
-            cout << "\t\t3. Сome back" << endl;
-        }
-        else{
-            logoText(typeDic);
-            colorTextB("\n\t\tПАРАМЕТРИ");
-            colorText("\n\n\t\tВиберіть дію:");
-            cout << "\t\t1. Зберегти у файл" << endl;
-            cout << "\t\t2. Про MyDictionary" << endl;
-            cout << "\t\t3. Повернутись" << endl;
-        }
-        optionRun();
-    }
-}
-void optionRun(){
-     int menuN,count=0;
-     do{
-        char c;
-        cout <<"\n\t\t";
-        cin >> c;
-        menuN = c - '0';
-         if(!(isdigit(c)) || menuN >3){//перевірка на введення команди//checking for a team entry
-             colorTextR("\t\tError of choice!");
-            count++;
-        }
-         if(count==5)
-             menuN=3;
-    }
-      while(!(menuN>0 && menuN <=3));
-       system("cls");//очистка екрану
-       switch (menuN)
-       {
-           case 1: {//буде створений will be created//save to the file
-                 ofstream outFile("dictionaryB.txt",ios_base::out| ios_base::trunc);
-                treePrint(root, outFile);
-                colorText("\tThe record is complete.");
-                system("pause");
-                system("cls");//очистка екрану
-                outFile.close();
-               break;
-            }
-           case 2: info();
-           system("cls");//очистка екрану//cleaning the screen
-               break;
-           case 3:menu();
-               break;
-       }
-
-}
 //performing menu actions
 bool menuRun(char buffer[], char buffer2[], bool typeDic){
-    double time;
-    double timeFast;
     int menu,count=0;
     do{
         char c;
         cout <<"\n\t\t";
         cin >> c;
         menu = c - '0';
-         if(!(isdigit(c)) || menu >5){//перевірка на введення команди//checking for a team entry
+         if(!(isdigit(c)) || menu >4){//перевірка на введення команди//checking for a team entry
              colorTextR("\t\tError of choice!");
             count++;
         }
          if(count==5)
              menu=0;
     }
-    while(!(menu>=0 && menu <=5));
+    while(!(menu>=0 && menu <=4));
 
  system("cls");//очистка екрану
     switch (menu)
@@ -215,14 +133,10 @@ bool menuRun(char buffer[], char buffer2[], bool typeDic){
     case 1:
         if (typeDic){
             while(1){
+
                 iter=0;
-                time = translation(buffer,buffer2,typeDic);
+               translationFast(buffer,buffer2,typeDic);
                 cout << "\t\tcount iteration: "<< iter<< endl;
-                iter=0;
-               timeFast = translationFast(buffer,buffer2,typeDic);
-                cout << "\t\tcount iteration: "<< iter<< endl;
-                colorTextW("\t\tTime difference: ");
-                cout <<  (time - timeFast) <<endl;
                 colorTextW("\n\t\tTranslation next (y/n)?");
                 char c = getch();
                 if(!(c == 'y' || c == 'Y'))
@@ -232,12 +146,12 @@ bool menuRun(char buffer[], char buffer2[], bool typeDic){
         }
         else{
             while(1){
-                iter=0;
-                translation(buffer,buffer2,typeDic);
-                cout << "\t\tcount iteration: "<< iter<< endl;
+               // iter=0;
+                //translation(buffer,buffer2,typeDic);
+
                 iter=0;
                 translationFast(buffer,buffer2,typeDic);
-                cout << "\t\tcount iteration: "<< iter<< endl;
+                cout << "\t\tКількість ітерацій: "<< iter<< endl;
                 colorTextW("\n\t\tНаступний переклад (y/n)?");
                 char c = getch();
                 if(!(c == 'y' || c == 'Y'))
@@ -251,8 +165,8 @@ bool menuRun(char buffer[], char buffer2[], bool typeDic){
         if (typeDic){
             while (1) {
                 flag =0;
-                if (typeDic)
-                {
+                //if (typeDic)
+                //{
                     AddWords(buffer, buffer2, typeDic);
 
                     colorText("\n\t\tIs add next word (y/n)?");
@@ -260,17 +174,21 @@ bool menuRun(char buffer[], char buffer2[], bool typeDic){
                     if(!(c == 'y' || c == 'Y'))
                         break;
                     system("cls");//очистка екрану
-                }
-}
+                //}
+            }
         }
         else{
             while (1) {
-                addWord(buffer, buffer2, typeDic);
+                //flag =0;
+               // if (typeDic)
+                //{
+                    AddWords(buffer, buffer2, typeDic);
                 colorText("\n\t\tДодати наступне слово (y/n)?");
                 char c = getch();
                 if(!(c == 'y' || c == 'Y'))
                     break;
                 system("cls");//очистка екрану
+               // }
             }
         }
         break;
@@ -303,6 +221,84 @@ bool menuRun(char buffer[], char buffer2[], bool typeDic){
     }
     return typeDic;
 }
+
+
+//menu
+void Options(bool typeDic){
+    system("cls");//очистка екрану//cleaning the screen
+    while (true){
+        if(typeDic){
+            logoText(typeDic);
+            colorTextB("\n\t\tOPTIONS");
+            colorText("\n\n\t\tSelect an action:");
+            cout << "\t\t1. Сomparison of search functions" << endl;
+            cout << "\t\t2. Save to file" << endl;
+            cout << "\t\t3. About MyDictionary" << endl;
+            cout << "\t\t4. Сome back" << endl;
+        }
+        else{
+            logoText(typeDic);
+            colorTextB("\n\t\tПАРАМЕТРИ");
+            colorText("\n\n\t\tВиберіть дію:");
+            cout << "\t\t1. Порівняння функцій пошуку" << endl;
+            cout << "\t\t2. Зберегти у файл" << endl;
+            cout << "\t\t3. Про MyDictionary" << endl;
+            cout << "\t\t4. Повернутись" << endl;
+        }
+        optionRun(typeDic);
+    }
+}
+void optionRun(bool typeDic){
+     int menuN,count=0;
+     char buffer[30] ,buffer2[30];
+     do{
+        char c;
+        cout <<"\n\t\t";
+        cin >> c;
+        menuN = c - '0';
+         if(!(isdigit(c)) || menuN >4){//перевірка на введення команди//checking for a team entry
+             colorTextR("\t\tError of choice!");
+            count++;
+        }
+         if(count==5)
+             menuN=4;
+    }
+      while(!(menuN>0 && menuN <=4));
+       system("cls");//очистка екрану
+       switch (menuN)
+       {
+           case 1:
+               while(1){
+
+                   //iter=0;
+                   compareFind(buffer,buffer2,typeDic);
+                   //cout << "\t\tcount iteration: "<< iter<< endl;
+                   colorTextW("\n\t\tTranslation next (y/n)?");
+                   char c = getch();
+                   if(!(c == 'y' || c == 'Y'))
+                       break;
+                   system("cls");//очистка екрану
+               }
+            system("cls");//очистка екрану
+           break;
+           case 2: {//буде створений will be created//save to the file
+                 ofstream outFile("dictionaryB.txt",ios_base::out| ios_base::trunc);
+                treePrint(root, outFile);
+                colorText("\tThe record is complete.");
+                system("pause");
+                system("cls");//очистка екрану
+                outFile.close();
+               break;
+            }
+           case 3: info();
+           system("cls");//очистка екрану//cleaning the screen
+               break;
+           case 4:menu();
+               break;
+       }
+
+}
+
 //searching words in dictionary
 double translation(char buffer[], char buffer2[],bool typeDic){
     double time;
@@ -314,21 +310,19 @@ double translation(char buffer[], char buffer2[],bool typeDic){
         cin >> buffer;//зчитую слово//read the word
         found = false;
         start_chrono();
-        //unsigned int start_time=  clock();//start time
+
         find(root, typeDic, buffer);
         time =elapsed();
-        cout << "\n\n\t\tSearch time chrono 1: " << elapsed() << endl;//вивід часу
-        //unsigned int end_time =  clock();
-        //unsigned search_time =(float) (end_time - start_time);
-        //cout << "\n\n\t\tNew search time (mls): " << search_time << endl;//вивід часу
+        cout << "\n\n\t\tSearch time chrono: " << elapsed() << endl;//вивід часу
+
         if (!found){
             colorTextR("\n\t\tTranslation not found.");
              cout << "\a";
-//            colorText("\n\t\tAdd word (y/n)? ");
-//            char c=getch();
-//            if(c == 'y' || c == 'Y'){// add word
-//                addWord(buffer, buffer2, typeDic);
-            //}
+           colorText("\n\t\tAdd word (y/n)? ");
+           char c=getch();
+            if(c == 'y' || c == 'Y'){// add word
+                addWord(buffer, buffer2, typeDic);
+            }
         }
 
     }
@@ -367,10 +361,11 @@ void addWord(char buffer[], char buffer2[],bool typeDic){
     else
     {
         cout << "\n\n\t\tДодати слово:" <<endl;
-        colorTextW("\tВведіть слово (ua)     ");
-        cout << buffer2;
-        colorTextW("\tВведіть переклад (Eng) ");
-            cin >> buffer;
+        colorTextW("\t    Введіть слово (Uk)   ");
+        fflush(stdin);
+        cout << buffer<<endl;
+        colorTextW("\tВведіть переклад (Eng)   ");
+            cin >> buffer2;
     }
 
         createNode(buffer2, buffer,&root);
@@ -395,6 +390,7 @@ void AddWords(char buffer[], char buffer2[],bool typeDic){
             gets(buffer2);
             colorText("\n\t\tAdd word (y/n)? ");
             char c=getch();
+
             if(c == 'y' || c == 'Y'){// add word
                 addWord(buffer, buffer2, typeDic);
             }
@@ -408,9 +404,9 @@ void AddWords(char buffer[], char buffer2[],bool typeDic){
     else{
         logoText(typeDic);
         cout << "\n\n\t\tДодати слово:" <<endl;
-        colorTextW("\tВведіть слово (ua)     ");
-        //cin >>  buffer2;
-        gets(buffer2);
+        colorTextW("\t\tВведіть слово (Ua)     ");
+        cin >>  buffer2;
+        //gets(buffer2);
         found = false;
         find(root, typeDic, buffer2);
         if (!found){
@@ -433,25 +429,18 @@ void AddWords(char buffer[], char buffer2[],bool typeDic){
     addDic(buffer2, buffer);
     }
 }
-//пошук за функцією fundHash
+//пошук за функцією fundHash основна
 double translationFast(char buffer[], char buffer2[],bool typeDic){
     double timeFast;
     if (typeDic)
         {
-        //logoText(typeDic);
-        //cout << "\n\n\t\tEnter word:  ";
-        //cin >> buffer;//зчитую слово//read the word
+        logoText(typeDic);
+        cout << "\n\n\t\tEnter word:  ";
+        cin >> buffer;//зчитую слово//read the word
         found = false;
-        //unsigned int start_time=  clock();//start time
+
         start_chrono();
-
-       // timer.start();
         findHash(root, typeDic, buffer); //Sleep(1000);
-         //timer.stop();
-
-       // cout << "\n\n\t\tsearch time chrono: " << elapsed() << endl;//вивід часу
-        //unsigned int end_time=  clock();//end time
-        //unsigned search_time =(float) (end_time - start_time);
         colorTextB("\n\n\t\tFast search time (mls): ");
         timeFast = elapsed();
         cout<< elapsed() << endl;//вивід часу
@@ -461,25 +450,30 @@ double translationFast(char buffer[], char buffer2[],bool typeDic){
             cout << "\a";
             colorText("\n\t\tAdd word (y/n)? ");
             char c=getch();
+
             if(c == 'y' || c == 'Y'){// add word
                 addWord(buffer, buffer2, typeDic);
             }
         }
 
     }
+    //пошук відбувається по ЛКП, так як ключ анг хеш
     else{
-        //logoText(typeDic);
+        logoText(typeDic);
         cout << "\n\n\t\tВведіть слово: ";
         cin >>  buffer2;
         found = false;
-        findHash(root, typeDic, buffer2);
+        start_chrono();
+        find(root, typeDic, buffer2);
+        colorTextB("\n\n\t\tFast search time (mls): ");
+        timeFast = elapsed();
+        cout<< elapsed() << endl;//вивід часу
         if (!found){
             colorTextR("\n\n\t\tПереклад не знайдений.");
              cout << "\a";
-
             colorText("\n\t\tДодати слово (y/n)? ");
             char c=getch();
-            if(c == 'y' || c == 'Y' || c == 'т'){// add word
+                       if(c == 'y' || c == 'Y' || c == 'т'){// add word
                 addWord(buffer, buffer2, typeDic);
             }
         }
@@ -487,6 +481,57 @@ double translationFast(char buffer[], char buffer2[],bool typeDic){
     return timeFast;
 }
 
-
+//Comparison of search functions//Порівняння функцій пошуку
+double compareFind(char buffer[], char buffer2[],bool typeDic){
+    double timeFast;
+        logoText(typeDic);
+        colorTextB("\t\tCOMPARISON OF SEARCH FUNCTIONS");
+        cout << "\n\t\tEnter word:  ";
+        cin >> buffer;//зчитую слово//read the word
+ //---------------------------------------------------------
+        iter=0;
+        found = false;
+        colorText("\t\tSearch by hash (comparison): ");
+        start_chrono();
+        findHash(root, typeDic, buffer); //Sleep(1000);
+        timeFast = elapsed();
+        colorTextB("\n\n\t\tSearch time (mls): ");
+        cout<< elapsed() << endl;//вивід часу
+         cout << "\t\tcount iteration: "<< iter<< endl;
+        colorTextB("\t---------------------------------------------");cout <<endl;
+ //---------------------------------------------------------
+        iter=0;
+        found = false;
+        colorText("\tSearch by hash (In-order):");
+        start_chrono();
+        find(root, typeDic, buffer);
+        timeFast = elapsed();
+        colorTextB("\n\n\t\tSearch time (mls): ");
+        cout<< elapsed() << endl;//вивід часу
+        cout << "\t\tcount iteration: "<< iter<< endl;
+        colorTextB("\t---------------------------------------------");cout <<endl;
+ //---------------------------------------------------------
+        iter=0;
+        found = false;
+        colorText("\tSearch by word (In-order):");
+        start_chrono();
+        findW(root, typeDic, buffer);
+        timeFast = elapsed();
+        colorTextB("\n\n\t\tSearch time (mls): ");
+        cout<< elapsed() << endl;//вивід часу
+        cout << "\t\tcount iteration: "<< iter<< endl;
+        colorTextB("\t---------------------------------------------");cout <<endl;
+ //---------------------------------------------------------
+        if (!found){
+            colorTextR("\n\t\tTranslation not found.");
+            cout << "\a";
+            colorText("\n\t\tAdd word (y/n)? ");
+            char c=getch();
+            if(c == 'y' || c == 'Y'){// add word
+                addWord(buffer, buffer2, typeDic);
+            }
+        }
+    return timeFast;
+}
 
 

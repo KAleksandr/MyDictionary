@@ -5,7 +5,7 @@ void treePrint(node *tree, ofstream& outFile)
      if (tree != NULL)
     {
         treePrint( tree->left, outFile);
-        outFile << tree->engWord << " " << tree->uaWord << endl;
+        outFile << tree->hashEn << " "<< tree->engWord << " " << tree->uaWord << " " << tree->hashUa<< endl;
         treePrint( tree->right, outFile);
     }
      cout << "\tRecord....."<< count++/2 <<endl;
