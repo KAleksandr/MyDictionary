@@ -5,18 +5,21 @@ CONFIG -= qt
 
 SOURCES += main.cpp \
     adddic.cpp \
-    window_size.cpp \
+    color.cpp \
     error_open.cpp \
-    color.cpp
+    treeoption.cpp \
+    search.cpp
+
+DISTFILES += \
+    time
 
 HEADERS += \
+    about.h \
     adddic.h \
-    window_size.h \
-    error_open.h \
     color.h \
+    error_open.h \
     hash.h \
     logo.h \
     time_chrono.h \
-    about.h
+    treeoption.h
 RC_FILE = dictionary.rc
-TARGET = MyDictionary_v2_1

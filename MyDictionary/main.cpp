@@ -19,13 +19,12 @@
  *                                                                        *
  *                   If the word is not found, the word is added to       *
  *                   the dictionary.                                      *
- *                   The dictionary has 3000+ words (English/Ukraine)     *
+ *                   The dictionary has 21000+ words (English/Ukraine)     *
  *                                                                        *
- *                    Version 2.1                                         *
+ *                    Version 2.2                                         *
  \************************************************************************/
 
 #include "adddic.h"
-#include "window_size.h"
 #include"logo.h"
 
 
@@ -33,8 +32,8 @@ int main(void)
 {
     SetConsoleCP(1251);
     SetConsoleOutputCP(1251);//local ukr
+    system("mode con cols=60 lines=35");//size windows
+
     logo();
-    window_size();
-    //window_size2();
     menu();
 }

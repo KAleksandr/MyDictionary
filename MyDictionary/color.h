@@ -9,4 +9,6 @@ void colorTextR(string buffer);
 void logoText(bool typeDic);
 void flagUa();
 void colorTextW(string buffer);
+void colorTextB(string buffer);
+void SetColor(int text, int background);
 #endif // COLOR_H

@@ -1,0 +1,14 @@
+
+cout << "\n\n\t\tsearch time1: " << elapsed() << endl;//вивід часу
+
+//start_chrono();//start лічильник часу//word search time counter
+start_chrono();
+start_chrono();//start лічильник часу//word search time counter
+ cout << "\n\n\t\tsearch time chrono: " << elapsed() << endl;//вивід часу
+
+
+
+unsigned int start_time=  clock();//start time
+unsigned int end_time=  clock();//end time
+ float search_time =(float) (end_time - start_time)/1000.0;
+cout << "\n\n\t\tNew search time: " << search_time << endl;//вивід часу

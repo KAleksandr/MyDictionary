@@ -8,7 +8,7 @@ void logo(){
     cout << "\t\t    ";
     flagUa();
     cout <<"\n\n\n\n\n\n";
-    colorText("\t\t    MyDictionary ver 2.1\n\n\n\n\n");
+    colorText("\t\t    MyDictionary ver 2.2\n\n\n\n\n");
 
     /*
        __                __

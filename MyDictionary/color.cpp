@@ -2,6 +2,31 @@
 #include <windows.h>
 #include "color.h"
 using namespace std;
+enum ConsoleColor
+{
+        Black         = 0,
+        Blue          = 1,
+        Green         = 2,
+        Cyan          = 3,
+        Red           = 4,
+        Magenta       = 5,
+        Brown         = 6,
+        LightGray     = 7,
+        DarkGray      = 8,
+        LightBlue     = 9,
+        LightGreen    = 10,
+        LightCyan     = 11,
+        LightRed      = 12,
+        LightMagenta  = 13,
+        Yellow        = 14,
+        White         = 15
+};
+// устанавливает цвет текста и подложки в консоли
+void SetColor(int text, int background)
+{
+        HANDLE hStdOut = GetStdHandle(STD_OUTPUT_HANDLE);
+        SetConsoleTextAttribute(hStdOut, (WORD)((background << 4) | text));
+}
 //колір тексту білий і перехід на новий рядок(основний колір тексту зелений)
 // the color of the text is white and the transition to a new line (the main color of the text is green)
 void colorText(char buffer[]){
@@ -33,6 +58,12 @@ void colorTextR(string buffer){
     HANDLE hStdOut = GetStdHandle(STD_OUTPUT_HANDLE);
     SetConsoleTextAttribute(hStdOut, 4);
     cout << buffer << endl;
+    SetConsoleTextAttribute(hStdOut, 2);
+}
+void colorTextB(string buffer){
+    HANDLE hStdOut = GetStdHandle(STD_OUTPUT_HANDLE);
+    SetConsoleTextAttribute(hStdOut, 9);
+    cout << buffer;
     SetConsoleTextAttribute(hStdOut, 2);
 }
 //Задаю текст і колір опису програми (logo)
